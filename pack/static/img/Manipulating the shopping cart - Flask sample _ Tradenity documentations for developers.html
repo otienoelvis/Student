@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Google Tag Manager -->
+    <script async="" crossorigin="anonymous" src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/fs.js.download"></script><script async="" src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/fbevents.js.download"></script><script type="text/javascript" async="" src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/analytics.js.download"></script><script async="" src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/gtm.js.download"></script><script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-NF8T6PD');
+    </script>
+    <!-- End Google Tag Manager -->
+    
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Add and remove items to cart, and view its content.">
+<meta name="keywords" content="javaspringweb,  python, flask, web">
+<title>Manipulating the shopping cart - Flask sample  | Tradenity documentations for developers</title>
+<style class="anchorjs"></style><link rel="stylesheet" href="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/syntax.css">
+
+
+<link rel="stylesheet" type="text/css" href="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/modern-business.css">
+<link rel="stylesheet" href="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/lavish-bootstrap.css">
+<link rel="stylesheet" href="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/customstyles.css">
+<link rel="stylesheet" href="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/theme-blue.css">
+
+<script src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/jquery.min.js.download"></script>
+<script src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/jquery.cookie.min.js.download"></script>
+<script src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/jquery.navgoco.min.js.download"></script>
+
+
+<script src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/bootstrap.min.js.download"></script>
+<script src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/anchor.min.js.download"></script>
+<script src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/toc.js.download"></script>
+<script src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/customscripts.js.download"></script>
+
+<link rel="shortcut icon" href="http://docs.tradenity.com/kb/images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="" href="http://www.tradenity.com/kb/feed.xml">
+
+
+
+
+ 
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    
+<script async="" src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/modules-v68.js.download"></script><script id="freshchat-js-sdk" async="" src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/widget.js.download"></script><link href="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/widget.css" rel="stylesheet"></head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NF8T6PD" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+<!-- End Google Tag Manager (noscript) -->
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="http://docs.tradenity.com/kb/">&nbsp;<span class="projectTitle"> Tradenity Documentation</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- entries without drop-downs appear here -->
+                
+                
+                
+                <li><a href="http://docs.tradenity.com/api" target="_blank">API Documentations</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                <!-- Send feedback function -->
+<script>
+function SendLinkByMail(href) {
+var subject= "Tradenity documentations for developers feedback";
+var body = "I have some feedback about the Manipulating the shopping cart - Flask sample page: ";
+body += window.location.href;
+body += "";
+var uri = "mailto:webmaster@tradenity.com?subject=";
+uri += encodeURIComponent(subject);
+uri += "&body=";
+uri += encodeURIComponent(body);
+window.location.href = uri;
+}
+</script>
+
+<li><a href="javascript:(function()%7BSendLinkByMail()%3B%7D)()%3B" target="_blank"><i class="fa fa-envelope-o"></i> Feedback</a></li>
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/jekyll-search.js.download" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: '/kb/search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Manipulating the shopping cart - Flask sample">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+<!-- Page Content -->
+<div class="container">
+    <div class="col-lg-12">&nbsp;</div>
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Sidebar Column -->
+        <div class="col-md-3">
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+<ul id="mysidebar" class="nav">
+    <li class="sidebarTitle">Tutorials </li>
+    
+    
+    
+    <li class="active">
+        <a href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#"><span></span>Python - Flask</a>
+        <ul data-index="0">
+            
+            
+            
+            <li><a href="http://docs.tradenity.com/kb/tutorials/python/flask">Back to main</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="http://docs.tradenity.com/kb/tutorials/python/flask/01_overview.html">Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="http://docs.tradenity.com/kb/tutorials/python/flask/02_browsing.html">Store browsing</a></li>
+            
+            
+            
+            
+            
+            
+            <li class="active"><a href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html">Shopping cart</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="http://docs.tradenity.com/kb/tutorials/python/flask/04_account.html">Manage accounts</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="http://docs.tradenity.com/kb/tutorials/python/flask/05_orders.html">Making orders</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+        
+        <!-- if you aren't using the accordion, uncomment this block:
+           <p class="external">
+               <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+           </p>
+           -->
+    </li>
+</ul>
+</div>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+    <!-- Content Column -->
+    <div class="col-md-9">
+        <div class="post-header">
+   <h1 class="post-title-main">Manipulating the shopping cart - Flask sample</h1>
+</div>
+
+<div class="post-content">
+
+   
+    <div class="summary">Add and remove items to cart, and view its content.</div>
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+  
+});
+</script>
+
+<div id="toc"> <ul><li><a href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#introducing-the-shopping-cart">Introducing the shopping cart</a><a class="anchorjs-link " href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#introducing-the-shopping-cart" aria-label="Anchor link for: introducing the shopping cart" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; line-height: 1; padding-left: 0.375em;"></a></li><li><a href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#add-items-the-shopping-cart">Add items the shopping cart</a><a class="anchorjs-link " href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#add-items-the-shopping-cart" aria-label="Anchor link for: add items the shopping cart" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; line-height: 1; padding-left: 0.375em;"></a></li><li><a href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#view-the-shopping-cart">View the shopping cart</a><a class="anchorjs-link " href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#view-the-shopping-cart" aria-label="Anchor link for: view the shopping cart" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; line-height: 1; padding-left: 0.375em;"></a></li><li><a href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#delete-items-from-the-cart">Delete items from the cart</a><a class="anchorjs-link " href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#delete-items-from-the-cart" aria-label="Anchor link for: delete items from the cart" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; line-height: 1; padding-left: 0.375em;"></a></li></ul></div>
+
+    
+
+    
+
+  <h2 id="introducing-the-shopping-cart" class="clickable-header top-level-header">Introducing the shopping cart<a class="anchorjs-link " href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#introducing-the-shopping-cart" aria-label="Anchor link for: introducing the shopping cart" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; line-height: 1; padding-left: 0.375em;"></a></h2><i class="icon-arrow-up back-to-top"> </i>
+
+<p>No real e-store without a shopping cart, so let’s implement one. First we get the shopping cart status and content to display them on the header of each page.</p>
+
+<p><code class="highlighter-rouge">camerastore/shop.py</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>Then display the status and content of the shopping cart in the header of the main layout template <code class="highlighter-rouge">layout.html</code></p>
+
+<p><code class="highlighter-rouge">camerastore/templates/default.html</code></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="err">&lt;</span><span class="na">div</span> <span class="na">class=</span><span class="s">"cart box_1"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span> $<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">"cart_total"</span> <span class="na">class=</span><span class="s">"simpleCart_total"</span><span class="nt">&gt;</span> {{ cart.total }} <span class="nt">&lt;/span&gt;</span>
+    (<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">"cart_items_count"</span> <span class="na">class=</span><span class="s">"simpleCart_quantity"</span><span class="nt">&gt;</span> {{ cart.count }} Items<span class="nt">&lt;/span&gt;</span>)
+    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"/static/images/bag.png"</span> <span class="na">alt=</span><span class="s">""</span> <span class="nt">/&gt;&lt;/h3&gt;</span>
+
+    <span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/cart"</span> <span class="na">class=</span><span class="s">"simpleCart_empty"</span><span class="nt">&gt;</span>Your cart<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"clearfix"</span><span class="nt">&gt;</span> <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+</code></pre></div></div>
+
+<h2 id="add-items-the-shopping-cart" class="clickable-header top-level-header">Add items the shopping cart<a class="anchorjs-link " href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#add-items-the-shopping-cart" aria-label="Anchor link for: add items the shopping cart" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; line-height: 1; padding-left: 0.375em;"></a></h2><i class="icon-arrow-up back-to-top"> </i>
+
+<p>We use AJAX to make a HTTP POST to our backend call with information about the item to add to the shopping cart,
+view <code class="highlighter-rouge">js/cart.js</code> file which contains the javascript AJAX code.</p>
+
+<p>This is how to add the item to the cart, it is as simple as a single method call.</p>
+
+<p><code class="highlighter-rouge">camerastore/cart.py</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">"/cart/add"</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">'POST'</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">add_to_cart</span><span class="p">():</span>
+    <span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">'product'</span><span class="p">],</span> <span class="n">quantity</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">'quantity'</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">cart</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h2 id="view-the-shopping-cart" class="clickable-header top-level-header">View the shopping cart<a class="anchorjs-link " href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#view-the-shopping-cart" aria-label="Anchor link for: view the shopping cart" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; line-height: 1; padding-left: 0.375em;"></a></h2><i class="icon-arrow-up back-to-top"> </i>
+
+<p><code class="highlighter-rouge">camerastore/cart.py</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">"/cart"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">view_cart</span><span class="p">():</span>
+    <span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">"cart.html"</span><span class="p">,</span> <span class="n">cart</span><span class="o">=</span><span class="n">cart</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>In a previous step (Introducing the shopping cart), we learned how to get the shopping cart, and displayed its status,
+Now all what we need is to write the view template to display full content of the shopping cart.</p>
+
+<p><code class="highlighter-rouge">camerastore/templates/cart.html</code></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;h2&gt;</span>MY SHOPPING CART <span class="nt">&lt;/h2&gt;</span>
+{% if cart.count <span class="nt">&lt;</span><span class="err">=</span> <span class="na">0</span> <span class="err">%}</span>
+<span class="err">&lt;</span><span class="na">h1</span><span class="nt">&gt;</span>No Items in your cart yet<span class="nt">&lt;/h1&gt;</span>
+{% else %}
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"cart-gd"</span><span class="nt">&gt;</span>
+    {% for item in cart.items %}
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"cart-header"</span> <span class="na">id=</span><span class="s">"{{item.id}}"</span> <span class="nt">&gt;</span>
+
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#"</span> <span class="na">class=</span><span class="s">"close1 deleteItem"</span> <span class="na">data-item-id=</span><span class="s">"{{item.id}}"</span><span class="nt">&gt;</span> <span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"cart-sec simpleCart_shelfItem"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"cart-item cyc"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{{item.product.mainPhoto.url}}"</span> <span class="na">class=</span><span class="s">"img-responsive"</span> <span class="na">alt=</span><span class="s">""</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"cart-item-info"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;h3&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#"</span><span class="nt">&gt;</span> {{ item.product.title }} <span class="nt">&lt;/a&gt;&lt;/h3&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"delivery"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;p&gt;&lt;span&gt;</span>Unit price : $<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="nt">&gt;</span>{{ item.product.price }}<span class="nt">&lt;/span&gt;&lt;/p&gt;</span>
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"clearfix"</span><span class="nt">&gt;&lt;/div&gt;</span>
+                    <span class="nt">&lt;p&gt;&lt;span&gt;</span>Quantity : <span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="nt">&gt;</span>{{ item.quantity }}<span class="nt">&lt;/span&gt;&lt;/p&gt;</span>
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"clearfix"</span><span class="nt">&gt;&lt;/div&gt;</span>
+                    <span class="nt">&lt;p&gt;&lt;span&gt;</span>Total price : $<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="nt">&gt;</span>{{ item.total }}<span class="nt">&lt;/span&gt;&lt;/p&gt;</span>
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"clearfix"</span><span class="nt">&gt;&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"clearfix"</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    {% endfor %}
+    <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">"margin-top: 50px; text-align: right;"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/checkout"</span> <span class="na">class=</span><span class="s">"big_button"</span><span class="nt">&gt;</span>Checkout<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+{% endif %}
+
+</code></pre></div></div>
+
+<h2 id="delete-items-from-the-cart" class="clickable-header top-level-header">Delete items from the cart<a class="anchorjs-link " href="http://docs.tradenity.com/kb/tutorials/python/flask/03_cart.html#delete-items-from-the-cart" aria-label="Anchor link for: delete items from the cart" data-anchorjs-icon="" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; line-height: 1; padding-left: 0.375em;"></a></h2><i class="icon-arrow-up back-to-top"> </i>
+
+<p>Like the ‘add item’ operation, removing item is dome with AJAX call to the <code class="highlighter-rouge">remove_from_cart</code> method:</p>
+
+<p><code class="highlighter-rouge">camerastore/cart.py</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">"/cart/remove/&lt;item_id&gt;"</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">'POST'</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">remove_from_cart</span><span class="p">(</span><span class="n">item_id</span><span class="p">):</span>
+    <span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">cart</span><span class="p">)</span>
+
+
+</code></pre></div></div>
+
+
+
+
+    
+
+</div>
+
+<hr class="shaded">
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               ©2019 Tradenity. All rights reserved. <br>
+<p>Page last updated: Jan 02, 2019<br> Site last generated: Nov 18, 2019 <br>
+</p><p><img style="width: 200px;" src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/company_logo.png" alt="Company logo"></p>
+                </div>
+            </div>
+</footer>
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+    </div>
+
+
+
+<script type="text/javascript" id="">!function(b,e,f,g,a,c,d){b.fbq||(a=b.fbq=function(){a.callMethod?a.callMethod.apply(a,arguments):a.queue.push(arguments)},b._fbq||(b._fbq=a),a.push=a,a.loaded=!0,a.version="2.0",a.queue=[],c=e.createElement(f),c.async=!0,c.src=g,d=e.getElementsByTagName(f)[0],d.parentNode.insertBefore(c,d))}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","722362711577744");fbq("track","PageView");</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=722362711577744&amp;ev=PageView&amp;noscript=1"></noscript>
+<script type="text/javascript" id="">window._fs_debug=!1;window._fs_host="fullstory.com";window._fs_script="edge.fullstory.com/s/fs.js";window._fs_org="Q746H";window._fs_namespace="FS";
+(function(e,h,k,l,f,b,a,g){k in e?e.console&&e.console.log&&e.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].'):(a=e[k]=function(d,c,b){a.q?a.q.push([d,c,b]):a._api(d,c,b)},a.q=[],b=h.createElement(l),b.async=1,b.crossOrigin="anonymous",b.src="https://"+_fs_script,g=h.getElementsByTagName(l)[0],g.parentNode.insertBefore(b,g),a.identify=function(d,c,b){a(f,{uid:d},b);c&&a(f,c,b)},a.setUserVars=function(d,c){a(f,d,c)},a.event=function(d,c,b){a("event",{n:d,p:c},b)},a.shutdown=
+function(){a("rec",!1)},a.restart=function(){a("rec",!0)},a.log=function(b,c){a("log",[b,c])},a.consent=function(b){a("consent",!arguments.length||b)},a.identifyAccount=function(d,c){b="account";c=c||{};c.acctId=d;a(b,c)},a.clearUserCookie=function(){})})(window,document,window._fs_namespace,"script","user");</script><script type="text/javascript" id="">function initFreshChat(){window.fcWidget.init({token:"7e9d9052-2aa6-4d8e-8041-884f91bb9a60",host:"https://wchat.freshchat.com"})}function initialize(b,c){var a;b.getElementById(c)?initFreshChat():((a=b.createElement("script")).id=c,a.async=!0,a.src="https://wchat.freshchat.com/js/widget.js",a.onload=initFreshChat,b.head.appendChild(a))}function initiateCall(){initialize(document,"freshchat-js-sdk")}
+window.addEventListener?window.addEventListener("load",initiateCall,!1):window.attachEvent("load",initiateCall,!1);</script><script type="text/javascript" id="" charset="utf-8" src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/ca3916563fab161148e12379facbe69b924892e1.js.download"></script><div id="fc_frame" class="fc-widget-normal h-open-notify fc-open" style="max-height: 518px; height: 279px;"><iframe id="fc_widget" name="fc_widget" title="Chat" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" src="./Manipulating the shopping cart - Flask sample _ Tradenity documentations for developers_files/saved_resource.html"></iframe></div></body></html>

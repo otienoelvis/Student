@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Edit Profile</h4>
+                        <p class="card-category">Complete your profile</p>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            {{ form.hidden_tag() }}
+                            <div class="row">
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        {{ form.full_name.label(class="bmd-label-floating" ) }}
+                                        {{ form.full_name(class="form-control bg-transparent text-white", type="text", id="fname", onblur="myFunction()") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.email.label(class="bmd-label-floating" ) }}
+                                        {{ form.email(class="form-control bg-transparent text-white", type="email", id="fname", onblur="myFunction()") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.password.label(class="bmd-label-floating" ) }}
+                                        {{ form.password(class="form-control bg-transparent text-secondary", type="password") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.confirm_password.label(class="bmd-label-floating" ) }}
+                                        {{ form.confirm_password(class="form-control bg-transparent text-secondary", type="password") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <!--button type="submit" >Update Profile</button-->
+                            {{ form.submit(class="btn btn-primary ") }}
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

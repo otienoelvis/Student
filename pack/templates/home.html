@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+    <body class="mt32">
+    <div class="container">
+        <h3>
+            <input  type="text" placeholder="Search rec..." class="form-control" id="myInput"/>
+        </h3>
+        <table id="myTable" class="table table-hover table-striped mt32 customers-list">
+            <thead>
+            <tr>
+                <th>Unit Code</th>
+                <th>Unit Name</th>
+                <th>Adm No</th>
+                <th>Student Name</th>
+                <th>Cat 1</th>
+                <th>Cat 2</th>
+                <th>Main Exam</th>
+                <th>Total</th>
+                <th>Grade</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for post in posts %}
+                <tr>
+                    <td>{{ post.unit_code }}</td>
+                    <td>{{ post.unit_name }}</td>
+                    <td>{{ post.admission_number }}</td>
+
+                    <td class="text-white" data-toggle="popover" title="{{ post.student.student_name }}"
+                        data-content="{{ post.student.admission_number }}">
+                        <a href="{{ url_for('student_results', admission_number=post.student.admission_number) }}">
+                            {{ post.student.student_name }}
+                        </a>
+                    </td>
+
+                    <td>{{ post.cat_1 }}</td>
+                    <td>{{ post.cat_2 }}</td>
+                    <td>{{ post.main_exam }}</td>
+                    <td>{{ post.total }}</td>
+                    <td>{{ post.grade }}</td>
+                </tr>
+                <script>
+                    $(document).ready(function() {
+                        $('[data-toggle="popover"]').popover({
+                            placement: 'top',
+                            trigger: 'hover'
+                        });
+                    });
+
+                </script>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+    </body>
+    <!---search -->
+    <script lang="javascript" type="text/javascript" src="/static/search.js"></script>
+{% endblock content %}
